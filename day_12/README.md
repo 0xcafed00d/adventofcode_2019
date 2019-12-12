@@ -1,5 +1,5 @@
 to run use: 
 
 ```
-go run day11.go
+go run day12.go
 ```
