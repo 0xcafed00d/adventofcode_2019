@@ -216,7 +216,6 @@ var dirinput = []int64{
 }
 
 func shortestDistance(maze map[point]rune, from point, to point, count int) (int, bool) {
-	fmt.Println(from)
 	if from == to {
 		return count, true
 	}
@@ -233,6 +232,20 @@ func shortestDistance(maze map[point]rune, from point, to point, count int) (int
 	}
 
 	return 0, false
+}
+
+func fillO2(maze map[point]rune, p point, count int, maxcount *int) {
+	if count > *maxcount {
+		*maxcount = count
+	}
+	maze[p] = 'O'
+
+	for dir := 0; dir < 4; dir++ {
+		nextp := p.add(dirs[dir])
+		if maze[nextp] != '#' && maze[nextp] != 'O' {
+			fillO2(maze, nextp, count+1, maxcount)
+		}
+	}
 }
 
 func main() {
@@ -262,7 +275,8 @@ func main() {
 	dir := 0
 
 	maze[pos] = 'S'
-	for cpu.execCodeOne() {
+	for i := 0; i < 100000000; i++ {
+		cpu.execCodeOne()
 		if cpu.inputreq {
 			if maze[pos.add(dirs[dir])] != 0 {
 				dir = (dir + rand.Intn(4)) % 4
@@ -282,12 +296,11 @@ func main() {
 				pos = pos.add(dirs[dir])
 				maze[pos] = 'X'
 				end = pos
-				break
+				//break
 			}
 		}
 	}
 
-	//maze[point{25, 25}] = 'S'
 	for y := 0; y < 50; y++ {
 		for x := 0; x < 50; x++ {
 			p := point{x, y}
@@ -302,4 +315,7 @@ func main() {
 	fmt.Println()
 
 	fmt.Println(shortestDistance(maze, start, end, 0))
+	count := 0
+	fillO2(maze, end, 0, &count)
+	fmt.Println(count)
 }
