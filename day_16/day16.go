@@ -20,10 +20,7 @@ func pattern(digit int) func() int {
 	count := 1
 	index := 0
 	return func() int {
-		if count > digit {
-			index = (index + 1) % len(src)
-			count = 0
-		}
+		index = (count / (digit + 1)) & 3
 		val := src[index]
 		count++
 		return val
@@ -37,16 +34,28 @@ func abs(a int) int {
 	return a
 }
 
-func doPhase(inp []int) (output []int) {
+func doPhase(inp []int, offset int) (output []int) {
+	src := []int{0, 1, 0, -1}
+	sz := len(inp)
 	output = make([]int, len(inp), len(inp))
-	for i := range inp {
-		fmt.Println(i)
-		pgen := pattern(i)
-		tot := 0
-		for _, v := range inp {
-			tot += v * pgen()
+	for oi := offset; oi < sz; oi++ {
+		if oi&0xff == 0 {
+			fmt.Println(oi)
 		}
-		output[i] = abs(tot) % 10
+		tot := 0
+		count := 1 + offset
+		index := 0
+		for ii := offset; ii < sz; ii++ {
+			index = (count / (oi + 1)) & 3
+			count++
+			switch src[index] {
+			case 1:
+				tot += inp[ii]
+			case -1:
+				tot -= inp[ii]
+			}
+		}
+		output[oi] = abs(tot) % 10
 	}
 	return
 }
@@ -65,12 +74,12 @@ func main() {
 
 	part1 := append([]int{}, input...)
 	for n := 0; n < 100; n++ {
-		part1 = doPhase(part1)
+		part1 = doPhase(part1, 0)
 	}
 	fmt.Println(part1[0:8])
 
 	offset := 0
-	for n := 0; n < 8; n++ {
+	for n := 0; n < 7; n++ {
 		offset *= 10
 		offset += input[n]
 	}
@@ -80,9 +89,12 @@ func main() {
 		part2 = append(part2, input...)
 	}
 
+	fmt.Println(offset)
+	fmt.Println(len(part2))
+
 	for n := 0; n < 100; n++ {
 		fmt.Print(".")
-		part2 = doPhase(part2)
+		part2 = doPhase(part2, offset)
 	}
-	fmt.Println(part2[offset : offset+8])
+	fmt.Println(part2[offset : offset+10])
 }
