@@ -48,26 +48,33 @@ func Test2(t *testing.T) {
 	assert := assert.Make(t)
 
 	input := []int{1, 2, 3, 4, 5, 6, 7, 8}
-	assert(doPhase(input, 0)).Equal([]int{4, 8, 2, 2, 6, 1, 5, 8})
+	assert(doPhase(input)).Equal([]int{4, 8, 2, 2, 6, 1, 5, 8})
 
 	input = []int{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3}
 	for i := 0; i < 100; i++ {
 		//fmt.Println(input)
-		input = doPhase(input, 0)
+		input = doPhase(input)
 	}
 	fmt.Println(input)
 
 	input = []int{3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3}
 	for i := 0; i < 100; i++ {
 		//fmt.Println(input)
-		input = doPhase(input, 0)
+		input = doPhase(input)
 	}
 	fmt.Println(input)
 
 	input = []int{3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3}
 	for i := 0; i < 100; i++ {
 		//fmt.Println(input)
-		input = doPhase(input, 9)
+		input = doPhase(input)
+	}
+	fmt.Println(input)
+
+	input = []int{3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3}
+	for i := 0; i < 100; i++ {
+		//fmt.Println(input)
+		input = doPhase2(input, 11)
 	}
 	fmt.Println(input)
 
